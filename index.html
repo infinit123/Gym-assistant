@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gym Assistant</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#07090D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <main>
+    <!-- DASHBOARD VIEW -->
+    <section id="view-dashboard" class="view active">
+      <div class="stagger-item">
+        <div class="title-hud">SYSTEM ONLINE</div>
+        <h1 id="dash-greeting" style="margin-bottom: 16px;">GOOD MORNING</h1>
+      </div>
+
+      <div class="hud-card stagger-item">
+        <div class="title-hud">YOUR FITNESS GOAL</div>
+        <div class="metric-row">
+          <div>
+            <span class="metric-unit">TARGET</span>
+            <div id="dash-target-weight" class="metric-value">-- <span class="metric-unit">KG</span></div>
+          </div>
+          <div style="text-align: right;">
+            <span class="metric-unit">CURRENT</span>
+            <div id="dash-current-weight" class="metric-value" style="font-size: 1.5rem; color: var(--text-secondary);">-- KG</div>
+          </div>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="dash-progress-fill" class="progress-bar-fill"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
+          <span id="dash-progress-pct">0% COMPLETE</span>
+          <span id="dash-remaining-weight">-- KG TO GO</span>
+        </div>
+      </div>
+
+      <div class="hud-card stagger-item">
+        <div class="title-hud">THIS WEEK</div>
+        <div class="metric-row">
+          <div>
+            <span class="metric-unit">WORKOUTS</span>
+            <div class="metric-value">04 <span class="metric-unit">/ 05</span></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.1rem; font-weight: 700; color: #ff9f1c;">🔥 12 DAY STREAK</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hud-card stagger-item">
+        <div class="title-hud">NEXT WORKOUT</div>
+        <h3 style="margin: 8px 0;">UPPER BODY</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">5 EXERCISES • ~55 MIN</p>
+        <button class="btn-hud" data-motion="press">START WORKOUT</button>
+      </div>
+    </section>
+
+    <!-- PROFILE VIEW -->
+    <section id="view-profile" class="view">
+      <div class="stagger-item">
+        <div class="title-hud">USER DATA</div>
+        <h1 style="margin-bottom: 16px;">PROFILE</h1>
+      </div>
+
+      <form id="profile-form" class="hud-card stagger-item">
+        <div class="form-group">
+          <label>Vârstă</label>
+          <input type="number" id="prof-age" class="form-control" placeholder="Ex: 25">
+        </div>
+        <div class="form-group">
+          <label>Sex</label>
+          <select id="prof-sex" class="form-control">
+            <option value="male">Masculin</option>
+            <option value="female">Feminin</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Înălțime (cm)</label>
+          <input type="number" id="prof-height" class="form-control" placeholder="Ex: 180">
+        </div>
+        <div class="form-group">
+          <label>Experiență Fitness</label>
+          <select id="prof-experience" class="form-control">
+            <option value="beginner">Începător</option>
+            <option value="intermediate">Intermediar</option>
+            <option value="advanced">Avansat</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Zile Antrenament / Săptămână</label>
+          <input type="number" id="prof-days" class="form-control" min="1" max="7" value="4">
+        </div>
+        <button type="submit" class="btn-hud" data-motion="press">SALVEAZĂ PROFIL</button>
+      </form>
+    </section>
+
+    <!-- GOAL VIEW -->
+    <section id="view-goal" class="view">
+      <div class="stagger-item">
+        <div class="title-hud">TARGET CONFIGURATION</div>
+        <h1 style="margin-bottom: 16px;">FITNESS GOAL</h1>
+      </div>
+
+      <form id="goal-form" class="hud-card stagger-item">
+        <div class="form-group">
+          <label>Obiectiv Principal</label>
+          <select id="goal-type" class="form-control">
+            <option value="lose">Lose Weight</option>
+            <option value="build">Build Muscle</option>
+            <option value="maintain">Maintain Weight</option>
+            <option value="recomp">Body Recomposition</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Greutate Inițială (KG)</label>
+          <input type="number" step="0.1" id="goal-start-weight" class="form-control" placeholder="Ex: 94.2">
+        </div>
+        <div class="form-group">
+          <label>Greutate Curentă (KG)</label>
+          <input type="number" step="0.1" id="goal-current-weight" class="form-control" placeholder="Ex: 94.2">
+        </div>
+        <div class="form-group">
+          <label>Greutate Țintă (KG)</label>
+          <input type="number" step="0.1" id="goal-target-weight" class="form-control" placeholder="Ex: 75.0">
+        </div>
+        <button type="submit" class="btn-hud" data-motion="press">ACTUALIZEAZĂ OBIECTIV</button>
+      </form>
+    </section>
+
+    <!-- SETTINGS VIEW -->
+    <section id="view-settings" class="view">
+      <div class="stagger-item">
+        <div class="title-hud">SYSTEM CONTROL</div>
+        <h1 style="margin-bottom: 16px;">SETTINGS</h1>
+      </div>
+
+      <div class="hud-card stagger-item">
+        <div class="form-group">
+          <label>Reducere Animații</label>
+          <button id="toggle-motion" class="btn-hud" data-motion="press" style="background: var(--surface-elevated); border-color: var(--surface-border);">TOGGLE MOTION</button>
+        </div>
+        <div class="form-group" style="margin-top: 24px;">
+          <button id="reset-data" class="btn-hud" data-motion="press" style="border-color: #ff4d4d; color: #ff4d4d;">RESETEAZĂ TOATE DATELE</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- NAVIGATION -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-target="view-dashboard" data-motion="press">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+      DASHBOARD
+    </button>
+    <button class="nav-item" data-target="view-profile" data-motion="press">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      PROFILE
+    </button>
+    <button class="nav-item" data-target="view-goal" data-motion="press">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+      GOAL
+    </button>
+    <button class="nav-item" data-target="view-settings" data-motion="press">
+      <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+      SETTINGS
+    </button>
+  </nav>
+
+  <script src="js/storage.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/goals.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
