@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Dashboard's NEXT WORKOUT card links into the real Workout Engine (V2)
+  document.getElementById('dash-goto-workout-btn')?.addEventListener('click', () => {
+    switchView('view-workout');
+  });
+
   // Settings Handlers
   document.getElementById('reset-data')?.addEventListener('click', () => {
     if (confirm('Sigur dorești să resetezi toate datele salvate local?')) {
@@ -43,5 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ProfileModule.init();
   GoalsModule.init();
   DashboardModule.render();
+  WorkoutModule.init();
   Motion.triggerStagger(document.getElementById('view-dashboard'));
 });

@@ -17,4 +17,12 @@
     transform: translateX(-50%);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
+
+  .wk-set-dots-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .wk-rest-countdown {
+    font-size: 3.2rem;
+  }
 }

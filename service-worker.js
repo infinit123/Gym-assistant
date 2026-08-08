@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gym-assistant-v1';
+const CACHE_NAME = 'gym-assistant-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -12,6 +12,8 @@ const ASSETS_TO_CACHE = [
   './js/profile.js',
   './js/goals.js',
   './js/dashboard.js',
+  './js/workoutData.js',
+  './js/workout.js',
   './js/app.js',
   './manifest.json'
 ];

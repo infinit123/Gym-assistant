@@ -63,8 +63,99 @@
         <div class="title-hud">NEXT WORKOUT</div>
         <h3 style="margin: 8px 0;">UPPER BODY</h3>
         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">5 EXERCISES • ~55 MIN</p>
-        <button class="btn-hud" data-motion="press">START WORKOUT</button>
+        <button id="dash-goto-workout-btn" class="btn-hud" data-motion="press">START WORKOUT</button>
       </div>
+    </section>
+
+    <!-- WORKOUT VIEW (V2 — Workout Engine) -->
+    <section id="view-workout" class="view">
+
+      <!-- SUB-VIEW: TODAY / REST DAY -->
+      <div id="wk-subview-today" class="wk-subview active">
+        <div class="stagger-item">
+          <div class="title-hud">TRAINING PROGRAM</div>
+          <h1 style="margin-bottom: 16px;">WORKOUT</h1>
+        </div>
+
+        <div id="wk-resume-banner" class="wk-resume-banner stagger-item hidden">
+          <div class="wk-resume-banner-text">
+            <div class="title-hud" style="margin-bottom: 2px;">SESSION IN PROGRESS</div>
+            <span id="wk-resume-name">—</span>
+          </div>
+          <div class="wk-resume-banner-actions">
+            <button id="wk-discard-resume-btn" class="btn-hud-sm" data-motion="press">DISCARD</button>
+            <button id="wk-resume-btn" class="btn-hud-sm primary" data-motion="press">RESUME</button>
+          </div>
+        </div>
+
+        <div id="wk-today-card" class="hud-card stagger-item">
+          <!-- Rendered by WorkoutModule.renderTodayCard() -->
+        </div>
+      </div>
+
+      <!-- SUB-VIEW: WORKOUT DETAIL -->
+      <div id="wk-subview-detail" class="wk-subview">
+        <div class="wk-header-row stagger-item">
+          <button id="wk-detail-back-btn" class="wk-icon-btn" data-motion="press" aria-label="Back">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          </button>
+        </div>
+
+        <div class="stagger-item">
+          <div class="title-hud">WORKOUT DETAIL</div>
+          <h1 id="wk-detail-title" style="margin-bottom: 4px;">—</h1>
+          <p id="wk-detail-meta" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">—</p>
+        </div>
+
+        <div id="wk-detail-exercise-list"></div>
+
+        <button id="wk-detail-start-btn" class="btn-hud stagger-item" data-motion="press" style="margin-top: 8px;">START WORKOUT</button>
+      </div>
+
+      <!-- SUB-VIEW: ACTIVE WORKOUT SESSION -->
+      <div id="wk-subview-active" class="wk-subview">
+        <div class="wk-header-row stagger-item">
+          <div class="title-hud" id="wk-active-workout-name">—</div>
+          <button id="wk-active-close-btn" class="wk-icon-btn" data-motion="press" aria-label="End workout">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        </div>
+
+        <div class="hud-card stagger-item">
+          <div id="wk-active-progress-bg" class="progress-bar-bg">
+            <div id="wk-active-progress-fill" class="progress-bar-fill"></div>
+          </div>
+          <div id="wk-active-exercise-counter" style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 4px;">EXERCISE 1 / 1</div>
+        </div>
+
+        <div id="wk-active-exercise-block" class="hud-card stagger-item">
+          <h2 id="wk-active-exercise-name" style="margin-bottom: 4px;">—</h2>
+          <p id="wk-active-sets-reps" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">—</p>
+
+          <div id="wk-set-dots" class="wk-set-dots-grid"></div>
+
+          <div id="wk-rest-panel" class="wk-rest-panel hidden">
+            <div class="title-hud">REST</div>
+            <div id="wk-rest-countdown" class="wk-rest-countdown">00:00</div>
+            <div id="wk-rest-complete-label" class="wk-rest-complete-label hidden">REST COMPLETE</div>
+            <button id="wk-skip-rest-btn" class="btn-hud-sm primary" data-motion="press">SKIP</button>
+          </div>
+
+          <button id="wk-complete-set-btn" class="btn-hud" data-motion="press" data-action="complete-set" style="margin-top: 12px;">COMPLETE SET</button>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW: WORKOUT COMPLETE -->
+      <div id="wk-subview-complete" class="wk-subview">
+        <div class="hud-card stagger-item" style="text-align: center; padding: 32px 20px;">
+          <div class="title-hud">WORKOUT COMPLETE</div>
+          <h1 id="wk-complete-title" style="margin: 12px 0 4px 0;">—</h1>
+          <p id="wk-complete-stats" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 4px;">—</p>
+          <p id="wk-complete-duration" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-primary); margin: 12px 0 24px 0;">—</p>
+          <button id="wk-complete-done-btn" class="btn-hud" data-motion="press">DONE</button>
+        </div>
+      </div>
+
     </section>
 
     <!-- PROFILE VIEW -->
@@ -158,11 +249,28 @@
     </section>
   </main>
 
+  <!-- END WORKOUT MODAL (ETAPA 15) -->
+  <div id="wk-end-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="title-hud">END WORKOUT?</div>
+      <h2>Are you sure?</h2>
+      <p>Your current progress will be saved. You can resume this session later from the Workout tab.</p>
+      <div class="modal-actions">
+        <button id="wk-end-modal-cancel" class="btn-hud-sm" data-motion="press" style="flex:1; min-height:48px;">CANCEL</button>
+        <button id="wk-end-modal-confirm" class="btn-hud btn-hud-danger" data-motion="press">END WORKOUT</button>
+      </div>
+    </div>
+  </div>
+
   <!-- NAVIGATION -->
   <nav class="bottom-nav">
     <button class="nav-item active" data-target="view-dashboard" data-motion="press">
       <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
       DASHBOARD
+    </button>
+    <button class="nav-item" data-target="view-workout" data-motion="press">
+      <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+      WORKOUT
     </button>
     <button class="nav-item" data-target="view-profile" data-motion="press">
       <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -183,6 +291,8 @@
   <script src="js/profile.js"></script>
   <script src="js/goals.js"></script>
   <script src="js/dashboard.js"></script>
+  <script src="js/workoutData.js"></script>
+  <script src="js/workout.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

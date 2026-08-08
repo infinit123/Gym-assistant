@@ -150,3 +150,267 @@
   height: 22px;
   fill: currentColor;
 }
+
+/* ===================================================================
+   WORKOUT ENGINE (V2)
+   Built entirely from existing tokens (--surface-*, --accent-*, --radius-*)
+   so it reads as part of V1, not a bolted-on module.
+=================================================================== */
+
+/* Sub-view switching inside #view-workout, mirrors .view/.view.active */
+.wk-subview {
+  display: none;
+}
+.wk-subview.active {
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Resume banner on the Workout dashboard */
+.wk-resume-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 0 16px var(--accent-primary-glow);
+}
+
+.wk-resume-banner-text {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.wk-resume-banner-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-hud-sm {
+  background: var(--surface-elevated);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.btn-hud-sm.primary {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* Back button used in Workout Detail / Active headers */
+.wk-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.wk-icon-btn {
+  background: var(--surface-elevated);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.wk-icon-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Exercise rows in Workout Detail */
+.wk-exercise-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.wk-exercise-index {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  opacity: 0.5;
+  letter-spacing: -0.02em;
+  min-width: 36px;
+}
+
+.wk-exercise-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Active workout: exercise transition (ETAPA 11 — slide + fade, short) */
+#wk-active-exercise-block {
+  transition: opacity var(--duration-normal) var(--ease-out-cubic),
+              transform var(--duration-normal) var(--ease-out-cubic);
+}
+
+.wk-exercise-transition-out #wk-active-exercise-block {
+  opacity: 0;
+  transform: translateX(-16px);
+}
+
+/* Set dots (ETAPA 8, 9) — large touch targets per ETAPA 18 */
+.wk-set-dots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.wk-set-dot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-elevated);
+  border: 1px solid var(--surface-border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  min-height: 52px;
+}
+
+.wk-set-dot-mark {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.wk-set-dot.completed {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(123,44,191,0.08));
+  box-shadow: 0 0 14px var(--accent-primary-glow);
+}
+
+/* Set-complete micro-animation: scale + glow pulse */
+@keyframes setPulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.06); box-shadow: 0 0 22px var(--accent-primary-glow); }
+  100% { transform: scale(1); }
+}
+
+.wk-set-pulse {
+  animation: setPulse var(--duration-normal) var(--ease-spring);
+}
+
+/* Rest timer panel (ETAPA 10) */
+.wk-rest-panel {
+  text-align: center;
+  padding: 20px 0 8px 0;
+}
+
+.wk-rest-countdown {
+  font-size: 2.6rem;
+  font-weight: 800;
+  font-feature-settings: "tnum";
+  color: var(--accent-primary);
+  letter-spacing: -0.02em;
+  margin: 4px 0 16px 0;
+  text-shadow: 0 0 20px var(--accent-primary-glow);
+}
+
+.wk-rest-complete-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin: 8px 0 16px 0;
+  letter-spacing: 0.05em;
+}
+
+/* Progress bar reuse note: active workout progress uses .progress-bar-bg / .progress-bar-fill directly */
+
+/* ===================================================================
+   MODAL (new, reusable) — no existing modal system in V1 to extend.
+   Styled with the same surface/border/radius tokens as .hud-card so it
+   reads as a native part of the design system.
+=================================================================== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 8, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 16px calc(24px + var(--sab)) 16px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface-color);
+  border: 1px solid var(--surface-border-active);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+  animation: modalEnter var(--duration-normal) var(--ease-out-cubic);
+}
+
+@keyframes modalEnter {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 8px 0 20px 0;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-actions .btn-hud {
+  width: auto;
+  flex: 1;
+}
+
+.btn-hud-danger {
+  background: linear-gradient(135deg, rgba(255,77,77,0.15), rgba(255,77,77,0.05));
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-card {
+    animation: none;
+  }
+  #wk-active-exercise-block {
+    transition: none;
+  }
+}
