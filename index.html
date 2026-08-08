@@ -2,13 +2,18 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Gym Assistant</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#07090D">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Gym Assistant — Futuristic Fitness Tracker</title>
+
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#030712">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
+  <meta name="apple-mobile-web-app-title" content="Gym Assistant">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+  <!-- CSS Resources -->
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
@@ -16,283 +21,63 @@
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
+  <div id="app" class="app-container">
+    
+    <!-- ONBOARDING VIEW CONTAINER (First Launch) -->
+    <div id="onboarding-container" class="onboarding-container hidden"></div>
 
-  <main>
-    <!-- DASHBOARD VIEW -->
-    <section id="view-dashboard" class="view active">
-      <div class="stagger-item">
-        <div class="title-hud">SYSTEM ONLINE</div>
-        <h1 id="dash-greeting" style="margin-bottom: 16px;">GOOD MORNING</h1>
-      </div>
-
-      <div class="hud-card stagger-item">
-        <div class="title-hud">YOUR FITNESS GOAL</div>
-        <div class="metric-row">
-          <div>
-            <span class="metric-unit">TARGET</span>
-            <div id="dash-target-weight" class="metric-value">-- <span class="metric-unit">KG</span></div>
-          </div>
-          <div style="text-align: right;">
-            <span class="metric-unit">CURRENT</span>
-            <div id="dash-current-weight" class="metric-value" style="font-size: 1.5rem; color: var(--text-secondary);">-- KG</div>
-          </div>
+    <!-- MAIN APP SHELL CONTAINER -->
+    <div id="main-shell" class="main-shell hidden">
+      <!-- Header / Top Bar -->
+      <header class="app-header">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">GYM<span class="highlight">ASSISTANT</span></span>
         </div>
-        <div class="progress-bar-bg">
-          <div id="dash-progress-fill" class="progress-bar-fill"></div>
+        <div class="header-actions">
+          <span class="date-badge" id="current-date">MON, 24 OCT</span>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
-          <span id="dash-progress-pct">0% COMPLETE</span>
-          <span id="dash-remaining-weight">-- KG TO GO</span>
-        </div>
-      </div>
+      </header>
 
-      <div class="hud-card stagger-item">
-        <div class="title-hud">THIS WEEK</div>
-        <div class="metric-row">
-          <div>
-            <span class="metric-unit">WORKOUTS</span>
-            <div class="metric-value">04 <span class="metric-unit">/ 05</span></div>
-          </div>
-          <div style="text-align: right;">
-            <div style="font-size: 1.1rem; font-weight: 700; color: #ff9f1c;">🔥 12 DAY STREAK</div>
-          </div>
-        </div>
-      </div>
+      <!-- Main Dynamic Content View -->
+      <main id="main-content" class="main-content">
+        <!-- Views loaded dynamically via App Router -->
+      </main>
 
-      <div class="hud-card stagger-item">
-        <div class="title-hud">NEXT WORKOUT</div>
-        <h3 style="margin: 8px 0;">UPPER BODY</h3>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">5 EXERCISES • ~55 MIN</p>
-        <button id="dash-goto-workout-btn" class="btn-hud" data-motion="press">START WORKOUT</button>
-      </div>
-    </section>
-
-    <!-- WORKOUT VIEW (V2 — Workout Engine) -->
-    <section id="view-workout" class="view">
-
-      <!-- SUB-VIEW: TODAY / REST DAY -->
-      <div id="wk-subview-today" class="wk-subview active">
-        <div class="stagger-item">
-          <div class="title-hud">TRAINING PROGRAM</div>
-          <h1 style="margin-bottom: 16px;">WORKOUT</h1>
-        </div>
-
-        <div id="wk-resume-banner" class="wk-resume-banner stagger-item hidden">
-          <div class="wk-resume-banner-text">
-            <div class="title-hud" style="margin-bottom: 2px;">SESSION IN PROGRESS</div>
-            <span id="wk-resume-name">—</span>
-          </div>
-          <div class="wk-resume-banner-actions">
-            <button id="wk-discard-resume-btn" class="btn-hud-sm" data-motion="press">DISCARD</button>
-            <button id="wk-resume-btn" class="btn-hud-sm primary" data-motion="press">RESUME</button>
-          </div>
-        </div>
-
-        <div id="wk-today-card" class="hud-card stagger-item">
-          <!-- Rendered by WorkoutModule.renderTodayCard() -->
-        </div>
-      </div>
-
-      <!-- SUB-VIEW: WORKOUT DETAIL -->
-      <div id="wk-subview-detail" class="wk-subview">
-        <div class="wk-header-row stagger-item">
-          <button id="wk-detail-back-btn" class="wk-icon-btn" data-motion="press" aria-label="Back">
-            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-          </button>
-        </div>
-
-        <div class="stagger-item">
-          <div class="title-hud">WORKOUT DETAIL</div>
-          <h1 id="wk-detail-title" style="margin-bottom: 4px;">—</h1>
-          <p id="wk-detail-meta" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">—</p>
-        </div>
-
-        <div id="wk-detail-exercise-list"></div>
-
-        <button id="wk-detail-start-btn" class="btn-hud stagger-item" data-motion="press" style="margin-top: 8px;">START WORKOUT</button>
-      </div>
-
-      <!-- SUB-VIEW: ACTIVE WORKOUT SESSION -->
-      <div id="wk-subview-active" class="wk-subview">
-        <div class="wk-header-row stagger-item">
-          <div class="title-hud" id="wk-active-workout-name">—</div>
-          <button id="wk-active-close-btn" class="wk-icon-btn" data-motion="press" aria-label="End workout">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-          </button>
-        </div>
-
-        <div class="hud-card stagger-item">
-          <div id="wk-active-progress-bg" class="progress-bar-bg">
-            <div id="wk-active-progress-fill" class="progress-bar-fill"></div>
-          </div>
-          <div id="wk-active-exercise-counter" style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 4px;">EXERCISE 1 / 1</div>
-        </div>
-
-        <div id="wk-active-exercise-block" class="hud-card stagger-item">
-          <h2 id="wk-active-exercise-name" style="margin-bottom: 4px;">—</h2>
-          <p id="wk-active-sets-reps" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">—</p>
-
-          <div id="wk-set-dots" class="wk-set-dots-grid"></div>
-
-          <div id="wk-rest-panel" class="wk-rest-panel hidden">
-            <div class="title-hud">REST</div>
-            <div id="wk-rest-countdown" class="wk-rest-countdown">00:00</div>
-            <div id="wk-rest-complete-label" class="wk-rest-complete-label hidden">REST COMPLETE</div>
-            <button id="wk-skip-rest-btn" class="btn-hud-sm primary" data-motion="press">SKIP</button>
-          </div>
-
-          <button id="wk-complete-set-btn" class="btn-hud" data-motion="press" data-action="complete-set" style="margin-top: 12px;">COMPLETE SET</button>
-        </div>
-      </div>
-
-      <!-- SUB-VIEW: WORKOUT COMPLETE -->
-      <div id="wk-subview-complete" class="wk-subview">
-        <div class="hud-card stagger-item" style="text-align: center; padding: 32px 20px;">
-          <div class="title-hud">WORKOUT COMPLETE</div>
-          <h1 id="wk-complete-title" style="margin: 12px 0 4px 0;">—</h1>
-          <p id="wk-complete-stats" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 4px;">—</p>
-          <p id="wk-complete-duration" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-primary); margin: 12px 0 24px 0;">—</p>
-          <button id="wk-complete-done-btn" class="btn-hud" data-motion="press">DONE</button>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- PROFILE VIEW -->
-    <section id="view-profile" class="view">
-      <div class="stagger-item">
-        <div class="title-hud">USER DATA</div>
-        <h1 style="margin-bottom: 16px;">PROFILE</h1>
-      </div>
-
-      <form id="profile-form" class="hud-card stagger-item">
-        <div class="form-group">
-          <label>Vârstă</label>
-          <input type="number" id="prof-age" class="form-control" placeholder="Ex: 25">
-        </div>
-        <div class="form-group">
-          <label>Sex</label>
-          <select id="prof-sex" class="form-control">
-            <option value="male">Masculin</option>
-            <option value="female">Feminin</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Înălțime (cm)</label>
-          <input type="number" id="prof-height" class="form-control" placeholder="Ex: 180">
-        </div>
-        <div class="form-group">
-          <label>Experiență Fitness</label>
-          <select id="prof-experience" class="form-control">
-            <option value="beginner">Începător</option>
-            <option value="intermediate">Intermediar</option>
-            <option value="advanced">Avansat</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Zile Antrenament / Săptămână</label>
-          <input type="number" id="prof-days" class="form-control" min="1" max="7" value="4">
-        </div>
-        <button type="submit" class="btn-hud" data-motion="press">SALVEAZĂ PROFIL</button>
-      </form>
-    </section>
-
-    <!-- GOAL VIEW -->
-    <section id="view-goal" class="view">
-      <div class="stagger-item">
-        <div class="title-hud">TARGET CONFIGURATION</div>
-        <h1 style="margin-bottom: 16px;">FITNESS GOAL</h1>
-      </div>
-
-      <form id="goal-form" class="hud-card stagger-item">
-        <div class="form-group">
-          <label>Obiectiv Principal</label>
-          <select id="goal-type" class="form-control">
-            <option value="lose">Lose Weight</option>
-            <option value="build">Build Muscle</option>
-            <option value="maintain">Maintain Weight</option>
-            <option value="recomp">Body Recomposition</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Greutate Inițială (KG)</label>
-          <input type="number" step="0.1" id="goal-start-weight" class="form-control" placeholder="Ex: 94.2">
-        </div>
-        <div class="form-group">
-          <label>Greutate Curentă (KG)</label>
-          <input type="number" step="0.1" id="goal-current-weight" class="form-control" placeholder="Ex: 94.2">
-        </div>
-        <div class="form-group">
-          <label>Greutate Țintă (KG)</label>
-          <input type="number" step="0.1" id="goal-target-weight" class="form-control" placeholder="Ex: 75.0">
-        </div>
-        <button type="submit" class="btn-hud" data-motion="press">ACTUALIZEAZĂ OBIECTIV</button>
-      </form>
-    </section>
-
-    <!-- SETTINGS VIEW -->
-    <section id="view-settings" class="view">
-      <div class="stagger-item">
-        <div class="title-hud">SYSTEM CONTROL</div>
-        <h1 style="margin-bottom: 16px;">SETTINGS</h1>
-      </div>
-
-      <div class="hud-card stagger-item">
-        <div class="form-group">
-          <label>Reducere Animații</label>
-          <button id="toggle-motion" class="btn-hud" data-motion="press" style="background: var(--surface-elevated); border-color: var(--surface-border);">TOGGLE MOTION</button>
-        </div>
-        <div class="form-group" style="margin-top: 24px;">
-          <button id="reset-data" class="btn-hud" data-motion="press" style="border-color: #ff4d4d; color: #ff4d4d;">RESETEAZĂ TOATE DATELE</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- END WORKOUT MODAL (ETAPA 15) -->
-  <div id="wk-end-modal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="title-hud">END WORKOUT?</div>
-      <h2>Are you sure?</h2>
-      <p>Your current progress will be saved. You can resume this session later from the Workout tab.</p>
-      <div class="modal-actions">
-        <button id="wk-end-modal-cancel" class="btn-hud-sm" data-motion="press" style="flex:1; min-height:48px;">CANCEL</button>
-        <button id="wk-end-modal-confirm" class="btn-hud btn-hud-danger" data-motion="press">END WORKOUT</button>
-      </div>
+      <!-- Bottom Navigation Bar -->
+      <nav class="bottom-nav">
+        <button class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="workout">
+          <span class="nav-icon">🏋️</span>
+          <span class="nav-label">Workout</span>
+        </button>
+        <button class="nav-item" data-view="goals">
+          <span class="nav-icon">🎯</span>
+          <span class="nav-label">Goals</span>
+        </button>
+        <button class="nav-item" data-view="profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-label">Profile</span>
+        </button>
+      </nav>
     </div>
+
+    <!-- GLOBAL MODAL CONTAINER -->
+    <div id="modal-container" class="modal-container hidden"></div>
   </div>
 
-  <!-- NAVIGATION -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" data-target="view-dashboard" data-motion="press">
-      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-      DASHBOARD
-    </button>
-    <button class="nav-item" data-target="view-workout" data-motion="press">
-      <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
-      WORKOUT
-    </button>
-    <button class="nav-item" data-target="view-profile" data-motion="press">
-      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-      PROFILE
-    </button>
-    <button class="nav-item" data-target="view-goal" data-motion="press">
-      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
-      GOAL
-    </button>
-    <button class="nav-item" data-target="view-settings" data-motion="press">
-      <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-      SETTINGS
-    </button>
-  </nav>
-
+  <!-- JavaScript Modules -->
   <script src="js/storage.js"></script>
   <script src="js/motion.js"></script>
-  <script src="js/profile.js"></script>
-  <script src="js/goals.js"></script>
-  <script src="js/dashboard.js"></script>
   <script src="js/workoutData.js"></script>
+  <script src="js/dashboard.js"></script>
   <script src="js/workout.js"></script>
+  <script src="js/goals.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/onboarding.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

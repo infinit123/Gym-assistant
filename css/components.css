@@ -1,416 +1,482 @@
-/* Cards */
-.hud-card {
-  background: var(--surface-color);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
+/* ==========================================================================
+   Gym Assistant Components & Onboarding Styling
+   ========================================================================== */
 
-.hud-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--surface-border-active), transparent);
-}
-
-/* Metrics & Values */
-.metric-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-top: 12px;
-}
-
-.metric-value {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.03em;
-  font-feature-settings: "tnum";
-}
-
-.metric-unit {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-/* Progress Bar */
-.progress-bar-bg {
+/* UI Containers & Layout */
+.app-container {
   width: 100%;
-  height: 8px;
-  background: var(--surface-elevated);
-  border-radius: 4px;
-  overflow: hidden;
-  margin: 12px 0 8px 0;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
-  box-shadow: 0 0 10px var(--accent-primary-glow);
-  transition: width 600ms var(--ease-out-cubic);
-}
-
-/* Form Controls */
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 6px;
-}
-
-.form-control {
-  width: 100%;
-  background: var(--surface-elevated);
-  border: 1px solid var(--surface-border);
-  color: var(--text-primary);
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  outline: none;
-}
-
-.form-control:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 12px var(--accent-primary-glow);
-}
-
-/* Primary HUD Button */
-.btn-hud {
-  width: 100%;
-  background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(123,44,191,0.15));
-  border: 1px solid var(--accent-primary);
-  color: #fff;
-  padding: 14px 20px;
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 20px var(--accent-primary-glow);
-}
-
-/* Navigation Bar */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0; right: 0;
-  height: calc(60px + var(--sab));
-  padding-bottom: var(--sab);
-  background: rgba(16, 20, 27, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--surface-border);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 100;
-}
-
-.nav-item {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  font-weight: 600;
+  height: 100vh;
+  height: -webkit-fill-available;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: color var(--duration-fast);
+  background-color: var(--bg-main, #030712);
+  color: var(--text-main, #f9fafb);
+  overflow: hidden;
+  position: relative;
 }
 
-.nav-item.active {
-  color: var(--accent-primary);
-}
-
-.nav-item svg {
-  width: 22px;
-  height: 22px;
-  fill: currentColor;
-}
-
-/* ===================================================================
-   WORKOUT ENGINE (V2)
-   Built entirely from existing tokens (--surface-*, --accent-*, --radius-*)
-   so it reads as part of V1, not a bolted-on module.
-=================================================================== */
-
-/* Sub-view switching inside #view-workout, mirrors .view/.view.active */
-.wk-subview {
-  display: none;
-}
-.wk-subview.active {
-  display: block;
+.main-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 .hidden {
   display: none !important;
 }
 
-/* Resume banner on the Workout dashboard */
-.wk-resume-banner {
+/* Onboarding Screen Structure */
+.onboarding-container {
+  width: 100%;
+  height: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 20px) 20px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% 10%, rgba(16, 185, 129, 0.08), transparent 70%), var(--bg-main, #030712);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Welcome Screen */
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 12px;
-  background: var(--surface-elevated);
-  border: 1px solid var(--accent-primary);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 0 16px var(--accent-primary-glow);
+  height: 100%;
+  min-height: 500px;
+  padding: 40px 10px 20px 10px;
+  text-align: center;
 }
 
-.wk-resume-banner-text {
+.welcome-brand {
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+.welcome-logo {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  display: inline-block;
+  filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.4));
+}
+
+.welcome-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.welcome-subtitle {
   font-size: 0.85rem;
-  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--primary, #10b981);
+  text-transform: uppercase;
+  margin-bottom: 24px;
 }
 
-.wk-resume-banner-actions {
+.welcome-desc {
+  font-size: 1rem;
+  color: var(--text-muted, #9ca3af);
+  max-width: 300px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.welcome-actions {
+  margin-top: auto;
+  padding-bottom: 20px;
+}
+
+/* Onboarding Questions Flow */
+.onboarding-flow {
   display: flex;
-  gap: 8px;
-  flex-shrink: 0;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
 }
 
-.btn-hud-sm {
-  background: var(--surface-elevated);
-  border: 1px solid var(--surface-border);
-  color: var(--text-primary);
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
+.onboarding-header {
+  padding-top: 10px;
+  margin-bottom: 24px;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 6px;
+  background-color: var(--bg-card, #111827);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary, #10b981), #34d399);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.progress-text {
   font-size: 0.75rem;
   font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted, #9ca3af);
+  text-align: right;
+}
+
+.question-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--primary, #10b981);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  cursor: pointer;
+  margin-bottom: 8px;
 }
 
-.btn-hud-sm.primary {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
+.question-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 24px;
+  line-height: 1.25;
 }
 
-/* Back button used in Workout Detail / Active headers */
-.wk-header-row {
+/* Selectable Option Cards */
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.option-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  padding: 16px 20px;
+  background-color: var(--bg-card, #111827);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.wk-icon-btn {
-  background: var(--surface-elevated);
-  border: 1px solid var(--surface-border);
-  color: var(--text-primary);
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
+.option-card:active {
+  transform: scale(0.98);
+}
+
+.option-card.selected {
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: var(--primary, #10b981);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+}
+
+.option-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-.wk-icon-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
+.option-card.selected .option-radio {
+  border-color: var(--primary, #10b981);
+  background-color: var(--primary, #10b981);
 }
 
-/* Exercise rows in Workout Detail */
-.wk-exercise-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.wk-exercise-index {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--accent-primary);
-  opacity: 0.5;
-  letter-spacing: -0.02em;
-  min-width: 36px;
-}
-
-.wk-exercise-info {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Active workout: exercise transition (ETAPA 11 — slide + fade, short) */
-#wk-active-exercise-block {
-  transition: opacity var(--duration-normal) var(--ease-out-cubic),
-              transform var(--duration-normal) var(--ease-out-cubic);
-}
-
-.wk-exercise-transition-out #wk-active-exercise-block {
+.option-radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #000;
   opacity: 0;
-  transform: translateX(-16px);
+  transition: opacity 0.2s ease;
 }
 
-/* Set dots (ETAPA 8, 9) — large touch targets per ETAPA 18 */
-.wk-set-dots-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin: 16px 0;
+.option-card.selected .option-radio::after {
+  opacity: 1;
 }
 
-.wk-set-dot {
+/* Numeric Input Fields */
+.input-group {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--surface-elevated);
-  border: 1px solid var(--surface-border);
-  color: var(--text-secondary);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.input-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-label {
   font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  min-height: 52px;
-}
-
-.wk-set-dot-mark {
-  font-size: 1.2rem;
-  line-height: 1;
-}
-
-.wk-set-dot.completed {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
-  background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(123,44,191,0.08));
-  box-shadow: 0 0 14px var(--accent-primary-glow);
-}
-
-/* Set-complete micro-animation: scale + glow pulse */
-@keyframes setPulse {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.06); box-shadow: 0 0 22px var(--accent-primary-glow); }
-  100% { transform: scale(1); }
-}
-
-.wk-set-pulse {
-  animation: setPulse var(--duration-normal) var(--ease-spring);
-}
-
-/* Rest timer panel (ETAPA 10) */
-.wk-rest-panel {
-  text-align: center;
-  padding: 20px 0 8px 0;
-}
-
-.wk-rest-countdown {
-  font-size: 2.6rem;
-  font-weight: 800;
-  font-feature-settings: "tnum";
-  color: var(--accent-primary);
-  letter-spacing: -0.02em;
-  margin: 4px 0 16px 0;
-  text-shadow: 0 0 20px var(--accent-primary-glow);
-}
-
-.wk-rest-complete-label {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent-primary);
-  margin: 8px 0 16px 0;
+  font-weight: 600;
+  color: var(--text-muted, #9ca3af);
+  text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-/* Progress bar reuse note: active workout progress uses .progress-bar-bg / .progress-bar-fill directly */
-
-/* ===================================================================
-   MODAL (new, reusable) — no existing modal system in V1 to extend.
-   Styled with the same surface/border/radius tokens as .hud-card so it
-   reads as a native part of the design system.
-=================================================================== */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 5, 8, 0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  z-index: 200;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 0 16px calc(24px + var(--sab)) 16px;
+.input-control-row {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-card, #111827);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 4px 16px;
+  transition: border-color 0.2s ease;
 }
 
-.modal-overlay.active {
+.input-control-row:focus-within {
+  border-color: var(--primary, #10b981);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.numeric-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 12px 0;
+}
+
+.input-unit {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary, #10b981);
+  margin-left: 8px;
+}
+
+.validation-hint {
+  font-size: 0.8rem;
+  color: #f87171;
+  margin-top: 4px;
+}
+
+/* Day Selection Grid */
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.day-btn {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0;
+  background-color: var(--bg-card, #111827);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-btn.selected {
+  background-color: var(--primary, #10b981);
+  color: #000000;
+  border-color: var(--primary, #10b981);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.day-schedule-hint {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary, #10b981);
+  text-align: center;
+  min-height: 20px;
+  margin-bottom: 16px;
+}
+
+/* Navigation Buttons */
+.onboarding-footer {
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  margin-top: auto;
+}
+
+.btn-primary, .btn-secondary {
+  flex: 1;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary, #10b981), #059669);
+  color: #000000;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: var(--bg-card, #111827);
+  color: var(--text-muted, #9ca3af);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Custom Training Loading Screen */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.loading-ring-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-ring {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid rgba(16, 185, 129, 0.1);
+  border-top-color: var(--primary, #10b981);
+  animation: spinRing 1s linear infinite;
+}
+
+.loading-icon {
+  position: absolute;
+  font-size: 2rem;
+}
+
+.loading-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.loading-status-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--primary, #10b981);
+  text-transform: uppercase;
+  height: 24px;
+  margin-bottom: 32px;
+}
+
+.loading-progress-bar {
+  width: 220px;
+  height: 4px;
+  background-color: var(--bg-card, #111827);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  width: 0%;
+  background-color: var(--primary, #10b981);
+  transition: width 0.2s linear;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+}
+
+@keyframes spinRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Confirmation Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 999;
 }
 
 .modal-card {
   width: 100%;
-  max-width: 480px;
-  background: var(--surface-color);
-  border: 1px solid var(--surface-border-active);
-  border-radius: var(--radius-lg);
-  padding: 22px;
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
-  animation: modalEnter var(--duration-normal) var(--ease-out-cubic);
+  max-width: 340px;
+  background-color: var(--bg-card, #111827);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
-@keyframes modalEnter {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 10px;
 }
 
-.modal-card p {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin: 8px 0 20px 0;
-  line-height: 1.5;
+.modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted, #9ca3af);
+  margin-bottom: 24px;
+  line-height: 1.4;
 }
 
 .modal-actions {
   display: flex;
   gap: 10px;
-}
-
-.modal-actions .btn-hud {
-  width: auto;
-  flex: 1;
-}
-
-.btn-hud-danger {
-  background: linear-gradient(135deg, rgba(255,77,77,0.15), rgba(255,77,77,0.05));
-  border-color: #ff4d4d;
-  color: #ff4d4d;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .modal-card {
-    animation: none;
-  }
-  #wk-active-exercise-block {
-    transition: none;
-  }
 }

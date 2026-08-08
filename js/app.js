@@ -1,53 +1,108 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Navigation View Switching
-  const navItems = document.querySelectorAll('.nav-item');
-  const views = document.querySelectorAll('.view');
+/**
+ * Main Application Controller & Router
+ */
+const App = {
+  init() {
+    this.mainShell = document.getElementById('main-shell');
+    this.onboardingContainer = document.getElementById('onboarding-container');
 
-  const switchView = (targetId) => {
-    views.forEach(view => {
-      if (view.id === targetId) {
-        view.classList.add('active');
-        Motion.triggerStagger(view);
-      } else {
-        view.classList.remove('active');
-      }
-    });
+    const onboardingCompleted = Storage.get(STORAGE_KEYS.ONBOARDING_COMPLETED);
 
-    navItems.forEach(item => {
-      item.classList.toggle('active', item.dataset.target === targetId);
-    });
-  };
-
-  navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      switchView(item.dataset.target);
-    });
-  });
-
-  // Dashboard's NEXT WORKOUT card links into the real Workout Engine (V2)
-  document.getElementById('dash-goto-workout-btn')?.addEventListener('click', () => {
-    switchView('view-workout');
-  });
-
-  // Settings Handlers
-  document.getElementById('reset-data')?.addEventListener('click', () => {
-    if (confirm('Sigur dorești să resetezi toate datele salvate local?')) {
-      Storage.clearAll();
-      location.reload();
+    if (!onboardingCompleted) {
+      this.startOnboarding();
+    } else {
+      this.launchMainApp();
     }
-  });
+  },
 
-  // Register PWA Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js')
-      .catch(err => console.log('SW registration failed:', err));
+  startOnboarding() {
+    this.mainShell.classList.add('hidden');
+    this.onboardingContainer.classList.remove('hidden');
+
+    Onboarding.init(this.onboardingContainer, () => {
+      this.launchMainApp();
+    });
+  },
+
+  launchMainApp() {
+    this.onboardingContainer.classList.add('hidden');
+    this.mainShell.classList.remove('hidden');
+    this.mainShell.classList.add('motion-fade-in');
+
+    this.setupNavigation();
+    this.renderCurrentDate();
+
+    if (window.Dashboard) {
+      Dashboard.init();
+    }
+  },
+
+  renderCurrentDate() {
+    const dateEl = document.getElementById('current-date');
+    if (dateEl) {
+      const now = new Date();
+      const options = { weekday: 'short', day: 'numeric', month: 'short' };
+      dateEl.textContent = now.toLocaleDateString('en-US', options).toUpperCase();
+    }
+  },
+
+  setupNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const view = item.dataset.view;
+        navItems.forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        this.navigateTo(view);
+      });
+    });
+  },
+
+  navigateTo(view) {
+    const mainContent = document.getElementById('main-content');
+    if (!mainContent) return;
+
+    if (view === 'dashboard' && window.Dashboard) {
+      Dashboard.init();
+    } else if (view === 'profile' && window.Profile) {
+      Profile.init();
+    } else if (view === 'goals' && window.Goals) {
+      Goals.init();
+    } else if (view === 'workout' && window.Workout) {
+      Workout.init();
+    }
+  },
+
+  showResetConfirmationModal() {
+    const modalContainer = document.getElementById('modal-container');
+    modalContainer.innerHTML = `
+      <div class="modal-overlay motion-fade-in">
+        <div class="modal-card">
+          <h3 class="modal-title">RESTART ONBOARDING?</h3>
+          <p class="modal-desc">Your current fitness profile will be replaced with new selections.</p>
+          <div class="modal-actions">
+            <button id="btn-cancel-modal" class="btn-secondary">CANCEL</button>
+            <button id="btn-confirm-reset" class="btn-primary" style="background: var(--danger, #ef4444); color: #fff;">RESTART</button>
+          </div>
+        </div>
+      </div>
+    `;
+    modalContainer.classList.remove('hidden');
+
+    document.getElementById('btn-cancel-modal').addEventListener('click', () => {
+      modalContainer.classList.add('hidden');
+      modalContainer.innerHTML = '';
+    });
+
+    document.getElementById('btn-confirm-reset').addEventListener('click', () => {
+      modalContainer.classList.add('hidden');
+      modalContainer.innerHTML = '';
+      Storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, false);
+      this.startOnboarding();
+    });
   }
+};
 
-  // Initializing Modules
-  Motion.init();
-  ProfileModule.init();
-  GoalsModule.init();
-  DashboardModule.render();
-  WorkoutModule.init();
-  Motion.triggerStagger(document.getElementById('view-dashboard'));
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
 });
